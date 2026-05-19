@@ -2,6 +2,8 @@
 
 My pre-course assignment. It's a single HTML file with four small games inside.
 
+Game live on : https://mrdaniyalali.github.io/pre-course-game/game.html
+
 ## What it does
 
 You open `index.html` in a browser and you get four tabs:
