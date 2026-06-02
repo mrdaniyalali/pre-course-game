@@ -1,5 +1,5 @@
 import { mutation, query } from './_generated/server'
-import { v } from 'convex/values'
+import { v, ConvexError } from 'convex/values'
 import { getEngine } from './engines/index.js'
 
 const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789' // no confusing chars
@@ -46,11 +46,11 @@ export const join = mutation({
   args: { code: v.string(), playerId: v.string(), name: v.string() },
   handler: async (ctx, { code, playerId, name }) => {
     const room = await findRoom(ctx, code)
-    if (!room) throw new Error('Room not found')
+    if (!room) throw new ConvexError('Room not found')
     const engine = getEngine(room.game)
     const existing = room.seats.findIndex((s) => s.playerId === playerId)
     if (existing >= 0) return { seat: existing }
-    if (room.seats.length >= engine.seats) throw new Error('Room is full')
+    if (room.seats.length >= engine.seats) throw new ConvexError('Room is full')
     const seats = [...room.seats, { playerId, name: name || `Player ${room.seats.length + 1}` }]
     await ctx.db.patch(room._id, {
       seats,
@@ -96,12 +96,17 @@ export const move = mutation({
   args: { code: v.string(), playerId: v.string(), move: v.any() },
   handler: async (ctx, { code, playerId, move }) => {
     const room = await findRoom(ctx, code)
-    if (!room) throw new Error('Room not found')
-    if (room.status === 'done') throw new Error('Game is over')
+    if (!room) throw new ConvexError('Room not found')
+    if (room.status === 'done') throw new ConvexError('Game is over')
     const seat = room.seats.findIndex((s) => s.playerId === playerId)
-    if (seat < 0) throw new Error('You are not in this room')
+    if (seat < 0) throw new ConvexError('You are not in this room')
     const engine = getEngine(room.game)
-    const nextState = engine.apply(room.state, move, seat)
+    let nextState
+    try {
+      nextState = engine.apply(room.state, move, seat)
+    } catch (e) {
+      throw new ConvexError(e.message || 'Invalid move')
+    }
     const result = engine.result(nextState)
     await ctx.db.patch(room._id, {
       state: nextState,
@@ -132,7 +137,7 @@ export const rematch = mutation({
   args: { code: v.string(), playerId: v.string() },
   handler: async (ctx, { code, playerId }) => {
     const room = await findRoom(ctx, code)
-    if (!room) throw new Error('Room not found')
+    if (!room) throw new ConvexError('Room not found')
     const votes = new Set(room.rematchVotes)
     votes.add(playerId)
     const everyone = room.seats.every((s) => votes.has(s.playerId))

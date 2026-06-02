@@ -8,6 +8,7 @@ import { ls } from '../lib/storage.js'
 import { useToast } from '../context/Toast.jsx'
 import { Btn } from '../components/GameShell.jsx'
 import { GAMES } from '../games/registry.js'
+import { errMsg } from '../lib/errMsg.js'
 
 function Inner() {
   const toast = useToast()
@@ -29,7 +30,7 @@ function Inner() {
       const { code: c } = await create({ name: groupName || 'My Crew', playerId, playerName: name || 'You' })
       remember(c)
       toast('Group created')
-    } catch (e) { toast(e.message || 'Could not create') }
+    } catch (e) { toast(errMsg(e, 'Could not create')) }
   }
   const onJoin = async () => {
     const c = joinCode.trim().toUpperCase()
@@ -37,7 +38,7 @@ function Inner() {
     try {
       await join({ code: c, playerId, playerName: name || 'Friend' })
       remember(c)
-    } catch (e) { toast(e.message || 'Could not join') }
+    } catch (e) { toast(errMsg(e, 'Could not join')) }
   }
 
   if (group) {
