@@ -1,5 +1,5 @@
 import { mutation, query } from './_generated/server'
-import { v } from 'convex/values'
+import { v, ConvexError } from 'convex/values'
 
 const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
 function makeCode() {
@@ -37,7 +37,7 @@ export const join = mutation({
   args: { code: v.string(), playerId: v.string(), playerName: v.string() },
   handler: async (ctx, { code, playerId, playerName }) => {
     const group = await findGroup(ctx, code)
-    if (!group) throw new Error('Group not found')
+    if (!group) throw new ConvexError('Group not found')
     if (group.members.some((m) => m.playerId === playerId)) return { code: group.code }
     await ctx.db.patch(group._id, {
       members: [...group.members, { playerId, name: playerName || 'Friend' }],

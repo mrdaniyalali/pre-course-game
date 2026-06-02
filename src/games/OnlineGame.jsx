@@ -7,6 +7,7 @@ import { useToast } from '../context/Toast.jsx'
 import { Btn } from '../components/GameShell.jsx'
 import Confetti from '../components/Confetti.jsx'
 import { sfx } from '../lib/sound.js'
+import { errMsg } from '../lib/errMsg.js'
 
 // Live, synced board once both players are seated. Game-over is server-authoritative
 // (room.status / winnerSeat) so it works even with redacted (fog-of-war) state.
@@ -44,7 +45,7 @@ function OnlineBoard({ room, engine, Board, mySeat, playerId, sendMove, rematch,
         mySeat={mySeat}
         onMove={async (move) => {
           try { await sendMove({ code: room.code, playerId, move }) }
-          catch (e) { toast(e.message || 'Invalid move') }
+          catch (e) { toast(errMsg(e, 'Invalid move')) }
         }}
       />
       {serverDone && (
@@ -81,7 +82,7 @@ export default function OnlineGame({ engineId, Board }) {
     try {
       const { code: c } = await createRoom({ game: engineId, playerId, name: name || 'Player 1' })
       setCode(c)
-    } catch (e) { toast(e.message || 'Could not create room') }
+    } catch (e) { toast(errMsg(e, 'Could not create room')) }
     finally { setBusy(false) }
   }
 
@@ -92,7 +93,7 @@ export default function OnlineGame({ engineId, Board }) {
     try {
       await joinRoom({ code: c, playerId, name: name || 'Player 2' })
       setCode(c)
-    } catch (e) { toast(e.message || 'Could not join') }
+    } catch (e) { toast(errMsg(e, 'Could not join')) }
     finally { setBusy(false) }
   }
 
