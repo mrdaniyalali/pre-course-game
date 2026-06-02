@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1b1633"/>
+      <stop offset="1" stop-color="#0a0814"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.32" cy="0.28" r="0.9">
+      <stop offset="0" stop-color="#7c5cff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#7c5cff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect width="512" height="512" rx="112" fill="url(#glow)"/>
+  <!-- wordmark P -->
+  <text x="50%" y="58%" text-anchor="middle" font-family="'Bricolage Grotesque','Segoe UI',sans-serif"
+        font-size="300" font-weight="800" fill="#f3eeff" letter-spacing="-8">P</text>
+  <!-- four game pips -->
+  <circle cx="150" cy="392" r="20" fill="#a78bff"/>
+  <circle cx="214" cy="392" r="20" fill="#2dd4bf"/>
+  <circle cx="278" cy="392" r="20" fill="#f6a93b"/>
+  <circle cx="342" cy="392" r="20" fill="#ff5d73"/>
+</svg>

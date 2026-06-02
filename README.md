@@ -1,53 +1,110 @@
-# Mini Game Suite
+# Pairs — Mini Arcade 🎮
 
-My pre-course assignment. It's a single HTML file with four small games inside.
+A pocket-sized arcade — solo brain games **plus online versus play with friends** — built with **React + Vite + Convex**, mobile-first, and installable as a **PWA** (works offline).
 
-Game live on : https://mrdaniyalali.github.io/pre-course-game/game.html
+> The original single-file prototype is preserved as `game.html` for reference.
 
-## What it does
+## 🎲 Games
 
-You open `index.html` in a browser and you get four tabs:
+**Solo:** Memory Match · Word Search · 2048 · Minesweeper
+**Versus (online room codes + same-screen):** Tic-Tac-Toe · Connect 4 · Chess (full rules) · Checkers · Hangman
+**Versus (online only — hidden info):** Battleship
 
-- **Memory** — flip cards, match the pairs
-- **Words** — word search puzzle, click and drag to find words
-- **2048** — slide tiles with arrow keys, merge same numbers
-- **Mines** — minesweeper, click to reveal, right-click to flag
+## ✨ Features
 
-There is a dark mode button at the top and a sound toggle. Score and best times get saved in the browser.
+- **Landing page** with an animated hero, split into Versus + Solo sections.
+- **A page per game** — deep-linkable; bottom dock for Home / Leaderboard / Groups.
+- **Online multiplayer** — create a room, share the 4-letter code, play live. Or "same screen" pass-and-play with no backend.
+- **Live leaderboard** and **friend groups** (create/join by code) powered by Convex.
+- **Per-game neon identity**, light/dark theme, synthesised sound, win confetti, reduced-motion support.
+- **Mobile-first & touch-native** — swipe (2048), drag-select (Word Search), long-press flag (Minesweeper).
+- **PWA** — manifest, service worker, offline caching, "Install app" prompt.
 
-## AI tool used
+## 🚀 Run it
 
-Claude (by Anthropic). I used it through Claude Code.
+```bash
+npm install      # install dependencies
+npm run dev      # start the dev server (http://localhost:5173)
+npm run build    # production build into dist/
+npm run preview  # preview the production build locally
+```
 
-## Prompts I used
+The app runs fully **without any backend** — solo games and same-screen versus work out of the box.
 
-I didn't write one big prompt. I built it step by step:
+## 🌐 Turn on online multiplayer (Convex)
 
-1. Read the assignment PDF and tell me what's needed.
-2. Make a simple memory card game in one HTML file.
-3. Make it look nicer, but not too fancy.
-4. Add a word search game as a second tab.
-5. Add 2048 and minesweeper too.
-6. Add a button to reveal all cards in the memory game.
-7. Add Animals and Food categories to the word search.
+Online rooms, the leaderboard, and groups use a free [Convex](https://convex.dev) backend:
 
-After each step I checked the result and asked for fixes.
+```bash
+npx convex dev    # sign in, creates a project, deploys convex/ functions
+                  # and writes VITE_CONVEX_URL into .env.local
+```
 
-## Problems I faced
+Leave that running, restart `npm run dev`, and online play lights up automatically. Until you do, those screens show a friendly "set up Convex" notice.
 
-- The first design was too plain. The second one was too much (gradients, glow, confetti). It took a few tries to land somewhere in between.
-- I tried adding sudoku but the generator was making invalid puzzles, so I removed it.
-- Getting the card flip animation to work needed `transform-style: preserve-3d` and `backface-visibility: hidden` — easy to forget.
-- The word search needed straight-line detection in 8 directions. The diagonal check was tricky.
+## 🧱 Tech stack
 
-## What I learned
+- **React 18** + **React Router** (HashRouter — refresh-safe on any static host)
+- **Convex** for real-time rooms, leaderboard, and groups
+- **Vite** for dev/build · **vite-plugin-pwa** (Workbox) for offline + manifest
+- Plain CSS with design tokens (no UI framework)
 
-- One HTML file can hold a lot. CSS variables make theming (light/dark) easy.
-- LocalStorage is good enough for saving best scores.
-- Designing is about removing stuff, not just adding. Simple looks better than busy.
-- Working with AI is faster when I ask for small steps and review each one.
+## 🕹️ How online play works
 
-## Files
+Each turn-based game is defined by a pure **engine** in `convex/engines/` (rules + win detection). The same engine runs **client-side** for same-screen play and **server-side** (in a Convex mutation) to validate every online move, so the board can't be cheated. Room state lives in Convex and the client re-renders reactively as the opponent moves — no polling.
 
-- `index.html` — the games
-- `README.md` — this file
+Games with **hidden information** (Hangman's word, Battleship's ships) implement an optional `view(state, seat)` on their engine. The Convex `getView` query runs it server-side so secret data is **redacted before it ever reaches the opponent's device** — true fog-of-war, not just hidden in the UI.
+
+Adding a game = write an engine (+ optional `view`), a board component, register it, add a route. Engine correctness is covered by quick Node checks (chess checkmate/castling, mandatory captures, etc.).
+
+## 📂 Structure
+
+```
+convex/                  # backend (deployed by `npx convex dev`)
+├─ schema.js             # rooms, scores, groups tables
+├─ rooms.js              # create/join/move/rematch room-code multiplayer
+├─ leaderboard.js        # submit + top + recent
+├─ groups.js             # create/join/get friend groups
+└─ engines/              # pure, shared game rules (client + server)
+   ├─ ticTacToe.js · connect4.js · hangman.js
+   ├─ checkers.js · chess.js · battleship.js
+   └─ index.js           # engine registry — add new versus games here
+
+src/
+├─ main.jsx              # app mount + providers (incl. Convex) + router
+├─ App.jsx               # routes
+├─ styles/global.css     # design tokens + all component styles
+├─ context/              # Settings (theme/sound) + Toast providers
+├─ lib/                  # storage, sound, timer, install-prompt, helpers
+├─ multiplayer/          # Convex client + anonymous identity
+├─ components/           # Layout, GameShell, Confetti
+├─ pages/                # Home, Leaderboard, Groups
+└─ games/
+   ├─ registry.js        # game metadata (drives landing + nav)
+   ├─ Memory / WordSearch / Game2048 / Minesweeper   # solo
+   ├─ TurnGame.jsx       # generic mode-chooser + local + online controller
+   ├─ OnlineGame.jsx     # Convex-synced room UI
+   ├─ TicTacToe.jsx / Connect4.jsx                    # versus
+   └─ boards/            # presentational board components
+```
+
+## ⌨️ Shortcuts
+
+`N` new game · `H` hint (Memory) · `P` pause (Memory) · `U` undo (2048) · `↑↓←→` move (2048) · `T` theme · `S` sound
+
+## 🌐 Deploy (Vercel)
+
+`base` is `./` and routing uses `HashRouter`, so the built `dist/` works on a custom domain or any static host with no rewrites.
+
+1. Import the repo in Vercel (framework preset: **Vite**, build `npm run build`, output `dist`).
+2. Add an environment variable so online play works:
+   - `VITE_CONVEX_URL` = `https://vibrant-tiger-655.eu-west-1.convex.cloud`
+3. Deploy, then point your custom domain at the project.
+
+The Convex **production** backend is already deployed (`npx convex deploy`). The `VITE_CONVEX_URL` above is the public client URL and is safe to expose — the **deploy key is secret** and must only live in your local shell / Convex dashboard, never in the repo or client.
+
+> **Icons:** the PWA ships crisp SVG icons (`public/icon.svg`, `icon-maskable.svg`). For maximum install fidelity on older Android, add PNG `192/512` versions to the manifest in `vite.config.js`.
+
+## 🤖 Built with
+
+Claude (Anthropic) via Claude Code — rebuilt from the original four-tab `game.html` prototype.

@@ -1,0 +1,25 @@
+{
+  "name": "pairs-arcade",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A mobile-first mini-game arcade — Memory, Word Search, 2048 and Minesweeper — built with React and installable as a PWA.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@auth/core": "^0.37.0",
+    "@convex-dev/auth": "^0.0.92",
+    "convex": "^1.40.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.4.8",
+    "vite-plugin-pwa": "^0.20.5"
+  }
+}
