@@ -13,6 +13,7 @@ import Battleship from './games/Battleship.jsx'
 import Hangman from './games/Hangman.jsx'
 import Leaderboard from './pages/Leaderboard.jsx'
 import Groups from './pages/Groups.jsx'
+import Friends from './pages/Friends.jsx'
 
 export default function App() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="/hangman" element={<Hangman />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/groups" element={<Groups />} />
+        <Route path="/friends" element={<Friends />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

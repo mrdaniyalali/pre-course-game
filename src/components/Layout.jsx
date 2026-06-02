@@ -5,6 +5,7 @@ import AuthButton from './AuthButton.jsx'
 const DOCK = [
   { to: '/', label: 'Home', glyph: '⌂', accent: 'violet', end: true },
   { to: '/leaderboard', label: 'Ranks', glyph: '★', accent: 'amber' },
+  { to: '/friends', label: 'Friends', glyph: '◐', accent: 'teal' },
   { to: '/groups', label: 'Groups', glyph: '◈', accent: 'rose' },
 ]
 

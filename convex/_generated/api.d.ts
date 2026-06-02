@@ -16,6 +16,7 @@ import type * as engines_connect4 from "../engines/connect4.js";
 import type * as engines_hangman from "../engines/hangman.js";
 import type * as engines_index from "../engines/index.js";
 import type * as engines_ticTacToe from "../engines/ticTacToe.js";
+import type * as friends from "../friends.js";
 import type * as groups from "../groups.js";
 import type * as http from "../http.js";
 import type * as leaderboard from "../leaderboard.js";
@@ -37,6 +38,7 @@ declare const fullApi: ApiFromModules<{
   "engines/hangman": typeof engines_hangman;
   "engines/index": typeof engines_index;
   "engines/ticTacToe": typeof engines_ticTacToe;
+  friends: typeof friends;
   groups: typeof groups;
   http: typeof http;
   leaderboard: typeof leaderboard;

@@ -33,4 +33,15 @@ export default defineSchema({
     members: v.array(v.object({ playerId: v.string(), name: v.string() })),
     createdAt: v.number(),
   }).index('by_code', ['code']),
+
+  // Friendships between signed-in users. One row per pair (ids stored sorted).
+  friendships: defineTable({
+    user1: v.id('users'),
+    user2: v.id('users'),
+    status: v.string(),            // 'pending' | 'accepted'
+    requestedBy: v.id('users'),
+    createdAt: v.number(),
+  })
+    .index('by_user1', ['user1'])
+    .index('by_user2', ['user2']),
 })
