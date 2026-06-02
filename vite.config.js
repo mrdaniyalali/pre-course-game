@@ -2,8 +2,8 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
-// Relative base + HashRouter => works on GitHub Pages project sites,
-// custom domains, or any static host without server rewrites.
+// Relative base + HashRouter => works on a custom domain (Vercel), a subpath,
+// or any static host without server rewrites.
 export default defineConfig({
   base: './',
   plugins: [

@@ -59,6 +59,9 @@ export default function Home() {
         <div style={{ marginTop: 8 }}>
           <kbd>T</kbd> theme · <kbd>S</kbd> sound · <kbd>N</kbd> new · <kbd>↑↓←→</kbd> 2048
         </div>
+        <div className="credit">
+          Created by <a href="https://bydansam.com/" target="_blank" rel="noopener noreferrer">bydansam</a>
+        </div>
       </footer>
     </>
   )

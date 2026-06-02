@@ -92,11 +92,18 @@ src/
 
 `N` new game · `H` hint (Memory) · `P` pause (Memory) · `U` undo (2048) · `↑↓←→` move (2048) · `T` theme · `S` sound
 
-## 🌐 Deploy (GitHub Pages)
+## 🌐 Deploy (Vercel)
 
-`base` is `./` and routing uses `HashRouter`, so the built `dist/` works on GitHub Pages project sites, custom domains, or any static host with no extra config. Build and publish the `dist/` folder.
+`base` is `./` and routing uses `HashRouter`, so the built `dist/` works on a custom domain or any static host with no rewrites.
 
-> **Icons:** the PWA ships crisp SVG icons (`public/icon.svg`, `icon-maskable.svg`). For maximum install fidelity on older Android, you can additionally drop in PNG `192/512` versions and add them to the manifest in `vite.config.js`.
+1. Import the repo in Vercel (framework preset: **Vite**, build `npm run build`, output `dist`).
+2. Add an environment variable so online play works:
+   - `VITE_CONVEX_URL` = `https://vibrant-tiger-655.eu-west-1.convex.cloud`
+3. Deploy, then point your custom domain at the project.
+
+The Convex **production** backend is already deployed (`npx convex deploy`). The `VITE_CONVEX_URL` above is the public client URL and is safe to expose — the **deploy key is secret** and must only live in your local shell / Convex dashboard, never in the repo or client.
+
+> **Icons:** the PWA ships crisp SVG icons (`public/icon.svg`, `icon-maskable.svg`). For maximum install fidelity on older Android, add PNG `192/512` versions to the manifest in `vite.config.js`.
 
 ## 🤖 Built with
 

@@ -189,6 +189,9 @@ button { font-family: inherit; }
 
 .home-foot { margin-top: var(--s-7); text-align: center; color: var(--ink-3); font-size: 12px; line-height: 1.9; }
 .home-foot kbd { font-family: var(--mono); font-size: 11px; background: var(--surface); border: var(--bw) solid var(--line); border-radius: 4px; padding: 1px 6px; color: var(--ink-2); }
+.credit { margin-top: var(--s-4); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; font-size: 11px; }
+.credit a { color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--accent); padding-bottom: 1px; transition: color var(--dur); }
+.credit a:hover { color: var(--accent); }
 
 .section-head { display: flex; align-items: baseline; gap: var(--s-3); margin: var(--s-6) 0 var(--s-3); font-family: var(--display); font-weight: 800; font-size: 16px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
 .section-head::before { content: ''; width: 14px; height: 14px; background: var(--accent); border: var(--bw) solid var(--line); transform: rotate(45deg); }
