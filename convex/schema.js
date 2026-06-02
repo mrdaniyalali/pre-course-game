@@ -1,8 +1,11 @@
 import { defineSchema, defineTable } from 'convex/server'
 import { v } from 'convex/values'
+import { authTables } from '@convex-dev/auth/server'
 
-// Data model for multiplayer rooms, the global leaderboard, and friend groups.
+// Data model for auth (users/sessions), multiplayer rooms, the global
+// leaderboard, and friend groups.
 export default defineSchema({
+  ...authTables,
   rooms: defineTable({
     code: v.string(),            // short join code, e.g. "K3P9"
     game: v.string(),            // engine id: 'tictactoe' | 'connect4' | ...
