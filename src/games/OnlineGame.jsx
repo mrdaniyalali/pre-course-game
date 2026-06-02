@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { getEngine } from '../../convex/engines/index.js'
-import { getPlayerId, getPlayerName, setPlayerName } from '../multiplayer/identity.js'
+import { getPlayerName, setPlayerName } from '../multiplayer/identity.js'
+import { usePlayer } from '../multiplayer/usePlayer.js'
 import { useToast } from '../context/Toast.jsx'
 import { Btn } from '../components/GameShell.jsx'
 import Confetti from '../components/Confetti.jsx'
@@ -61,9 +62,11 @@ function OnlineBoard({ room, engine, Board, mySeat, playerId, sendMove, rematch,
 export default function OnlineGame({ engineId, Board }) {
   const toast = useToast()
   const engine = getEngine(engineId)
-  const playerId = getPlayerId()
+  const player = usePlayer()
+  const playerId = player.id
 
-  const [name, setName] = useState(getPlayerName())
+  const [guestName, setGuestName] = useState(getPlayerName())
+  const name = player.authed ? player.name : guestName
   const [code, setCode] = useState('')
   const [joinCode, setJoinCode] = useState('')
   const [busy, setBusy] = useState(false)
@@ -75,7 +78,7 @@ export default function OnlineGame({ engineId, Board }) {
 
   const room = useQuery(api.rooms.getView, code ? { code, playerId } : 'skip')
 
-  const saveName = (v) => { setName(v); setPlayerName(v) }
+  const saveName = (v) => { setGuestName(v); setPlayerName(v) }
 
   const onCreate = async () => {
     setBusy(true)
@@ -100,10 +103,14 @@ export default function OnlineGame({ engineId, Board }) {
   if (!code) {
     return (
       <div className="lobby">
-        <label className="lobby-field">
-          <span>Your name</span>
-          <input value={name} onChange={(e) => saveName(e.target.value)} placeholder="e.g. Dani" maxLength={16} />
-        </label>
+        {player.authed ? (
+          <div className="playing-as">Playing as <b>{name}</b></div>
+        ) : (
+          <label className="lobby-field">
+            <span>Your name</span>
+            <input value={name} onChange={(e) => saveName(e.target.value)} placeholder="e.g. Dani" maxLength={16} />
+          </label>
+        )}
         <div className="lobby-actions">
           <Btn onClick={onCreate} disabled={busy}>Create room →</Btn>
         </div>

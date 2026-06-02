@@ -1,5 +1,6 @@
 import { Outlet, NavLink, Link, useLocation } from 'react-router-dom'
 import { useSettings } from '../context/Settings.jsx'
+import AuthButton from './AuthButton.jsx'
 
 const DOCK = [
   { to: '/', label: 'Home', glyph: '⌂', accent: 'violet', end: true },
@@ -21,6 +22,7 @@ export default function Layout() {
         </Link>
 
         <div className="masthead-tools">
+          <AuthButton />
           <button
             className="icon-btn"
             type="button"

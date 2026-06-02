@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { isConvexConfigured } from '../multiplayer/ConvexClient.jsx'
-import { getPlayerId, getPlayerName, setPlayerName } from '../multiplayer/identity.js'
+import { getPlayerName, setPlayerName } from '../multiplayer/identity.js'
+import { usePlayer } from '../multiplayer/usePlayer.js'
 import { ls } from '../lib/storage.js'
 import { useToast } from '../context/Toast.jsx'
 import { Btn } from '../components/GameShell.jsx'
@@ -12,8 +13,10 @@ import { errMsg } from '../lib/errMsg.js'
 
 function Inner() {
   const toast = useToast()
-  const playerId = getPlayerId()
-  const [name, setName] = useState(getPlayerName())
+  const player = usePlayer()
+  const playerId = player.id
+  const [guestName, setGuestName] = useState(getPlayerName())
+  const name = player.authed ? player.name : guestName
   const [groupName, setGroupName] = useState('')
   const [joinCode, setJoinCode] = useState('')
   const [code, setCode] = useState(() => ls.get('group.code', '') || '')
@@ -22,7 +25,7 @@ function Inner() {
   const join = useMutation(api.groups.join)
   const group = useQuery(api.groups.get, code ? { code } : 'skip')
 
-  const saveName = (v) => { setName(v); setPlayerName(v) }
+  const saveName = (v) => { setGuestName(v); setPlayerName(v) }
   const remember = (c) => { setCode(c); ls.set('group.code', c) }
 
   const onCreate = async () => {
@@ -77,10 +80,14 @@ function Inner() {
 
   return (
     <div className="group-setup">
-      <label className="lobby-field">
-        <span>Your name</span>
-        <input value={name} onChange={(e) => saveName(e.target.value)} placeholder="e.g. Dani" maxLength={16} />
-      </label>
+      {player.authed ? (
+        <div className="playing-as">Playing as <b>{name}</b></div>
+      ) : (
+        <label className="lobby-field">
+          <span>Your name</span>
+          <input value={name} onChange={(e) => saveName(e.target.value)} placeholder="e.g. Dani" maxLength={16} />
+        </label>
+      )}
 
       <div className="group-card">
         <h3>Create a group</h3>

@@ -118,6 +118,31 @@ button { font-family: inherit; }
 
 .app-main { flex: 1; padding-bottom: 104px; }
 
+/* ---------------- Auth (Google) ---------------- */
+.auth-signin {
+  display: inline-flex; align-items: center; gap: 7px; cursor: pointer;
+  height: 42px; padding: 0 14px; border-radius: var(--r-2);
+  border: var(--bw) solid var(--line); background: var(--surface); color: var(--ink);
+  font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.03em;
+  box-shadow: var(--sh);
+  transition: transform var(--dur) var(--spring), box-shadow var(--dur), background var(--dur), color var(--dur);
+}
+.auth-signin:hover { transform: translate(-2px,-2px); box-shadow: var(--sh-lg); background: var(--accent); color: var(--accent-on); }
+.auth-signin:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 var(--hard); }
+.auth-signin .g { font-family: var(--display); font-weight: 800; font-size: 15px; line-height: 1; }
+.auth-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 42px; padding: 0 6px 0 8px; border-radius: var(--r-2);
+  border: var(--bw) solid var(--line); background: var(--surface); box-shadow: var(--sh);
+}
+.auth-avatar { width: 26px; height: 26px; border-radius: 6px; border: var(--bw) solid var(--line); object-fit: cover; }
+.auth-avatar.fallback { display: grid; place-items: center; background: var(--accent); color: var(--accent-on); font-weight: 800; font-size: 13px; }
+.auth-name { font-weight: 700; font-size: 13px; max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.auth-out { appearance: none; cursor: pointer; width: 28px; height: 28px; border-radius: 6px; border: var(--bw) solid var(--line); background: var(--surface-2); color: var(--ink-2); font-size: 14px; }
+.auth-out:hover { background: var(--rose); color: #fff; }
+.playing-as { text-align: center; font-size: 14px; color: var(--ink-2); padding: 10px; border: var(--bw) dashed var(--line); border-radius: var(--r-2); }
+.playing-as b { color: var(--accent); }
+
 /* ---------------- Bottom dock ---------------- */
 .dock {
   position: fixed; left: 50%; transform: translateX(-50%);
